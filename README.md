@@ -8,7 +8,7 @@
 | 阶段 | 内容 | 状态 |
 |---|---|---|
 | 阶段 0 | 环境：gcc / make / git / VS Code | ✅ 2026-11-26 |
-| 阶段 1 | 基础模块：ringbuf、crc16、can_frame | ⬜ 进行中 |
+| 阶段 1 | 基础模块：ringbuf、crc16、can_frame | 🟡 ringbuf 完成（20 项测试全过） |
 | 阶段 2 | 协议层：can_proto + 周期调度 | ⬜ |
 | 阶段 3 | 双节点 PC 仿真 + 丢帧统计 | ⬜ |
 | 阶段 4 | 诊断：DTC + 超时检测 | ⬜ |
@@ -58,7 +58,23 @@ frame #37
 sizeof(SensorFrame_t) = 6 byte(s)
 ```
 
+## 第一个模块：ringbuf（环形缓冲区）
+
+```powershell
+cd D:\embedded-kit
+
+# 编译：被测模块 + 测试程序 一起编译
+gcc -std=c11 -Wall -Wextra -O2 -g tests/test_ringbuf.c src/app/ringbuf.c -o tests/test_ringbuf.exe
+
+# 运行测试
+.\tests\test_ringbuf.exe
+```
+
+预期最后一行：`ALL TESTS PASSED`（20 项检查）。
+
+> 现在每个模块只有一两个文件，一条 gcc 命令够用；等 crc16、can_frame 都写完，
+> 再加 Makefile 统一管理（`make test` 一条命令跑全部）。
+
 ## 下一步
 
-写 `src/app/ringbuf.c/.h`：环形缓冲区，配 `tests/test_ringbuf.c`。
-详见 `D:\workspace\2026年12月软件期计划.md` 的 Week 1。
+写 `src/app/crc16.c/.h`（CRC-16/CCITT 查表法），配 `tests/test_crc16.c`。
